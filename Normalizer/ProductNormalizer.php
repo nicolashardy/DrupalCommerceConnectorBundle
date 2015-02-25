@@ -4,7 +4,7 @@ namespace Actualys\Bundle\DrupalCommerceConnectorBundle\Normalizer;
 
 use Actualys\Bundle\DrupalCommerceConnectorBundle\Normalizer\Exception\NormalizeException;
 use Pim\Bundle\CatalogBundle\Entity\Category;
-use Pim\Bundle\CatalogBundle\Model\Product;
+use Pim\Bundle\CatalogBundle\Model\AbstractProduct as Product;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Actualys\Bundle\DrupalCommerceConnectorBundle\Guesser\NormalizerGuesser;
 use Pim\Bundle\CatalogBundle\Manager\ChannelManager;

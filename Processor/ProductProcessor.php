@@ -66,7 +66,7 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
     /**
      * Normalize the given product
      *
-     * @param ProductInterface $product [description]
+     * @param $product [description]
      * @param Channel          $channel
      *
      * @throws InvalidItemException If a normalization error occurs
@@ -74,7 +74,7 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
      * @return array processed item
      */
     protected function normalizeProduct(
-      ProductInterface $product,
+      $product,
       Channel $channel
     ) {
         try {
