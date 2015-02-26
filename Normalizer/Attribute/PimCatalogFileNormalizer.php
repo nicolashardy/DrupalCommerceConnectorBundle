@@ -51,7 +51,7 @@ class PimCatalogFileNormalizer extends AbstractMediaNormalizer
           'allowed_extensions' => $allowed_extensions,
         ];
 
-        if ($attribute->isLocalizable()) {
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();

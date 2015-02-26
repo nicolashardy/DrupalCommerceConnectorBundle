@@ -49,14 +49,14 @@ class PimCatalogTextNormalizer implements NormalizerInterface
           'validation_rule'   => $attribute->getValidationRule(),
         ];
 
-        if ($attribute->isLocalizable()) {
+
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();
             }
         } else {
-            $normalizedAttribute['labels'][LANGUAGE_NONE] = $attribute->getLabel(
-            );
+            $normalizedAttribute['labels'][LANGUAGE_NONE] = $attribute->getLabel();
         }
 
         return $normalizedAttribute;

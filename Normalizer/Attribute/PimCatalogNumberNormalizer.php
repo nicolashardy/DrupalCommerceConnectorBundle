@@ -51,7 +51,7 @@ class PimCatalogNumberNormalizer implements NormalizerInterface
           'number_max'        => (bool) $attribute->getNumberMax(),
         ];
 
-        if ($attribute->isLocalizable()) {
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();

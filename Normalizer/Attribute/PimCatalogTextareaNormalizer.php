@@ -48,7 +48,7 @@ class PimCatalogTextareaNormalizer implements NormalizerInterface
           'max_characters'    => $attribute->getMaxCharacters(),
         ];
 
-        if ($attribute->isLocalizable()) {
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();

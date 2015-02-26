@@ -48,7 +48,7 @@ class PimCatalogBooleanNormalizer implements NormalizerInterface
           'default_value'     => $attribute->getDefaultValue(),
         ];
 
-        if ($attribute->isLocalizable()) {
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();

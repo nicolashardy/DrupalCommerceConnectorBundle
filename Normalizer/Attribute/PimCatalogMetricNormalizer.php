@@ -52,7 +52,7 @@ class PimCatalogMetricNormalizer implements NormalizerInterface
           'default_metric_unit' => $attribute->getDefaultMetricUnit(),
         ];
 
-        if ($attribute->isLocalizable()) {
+        if ($attribute->getTranslations()) {
             foreach ($attribute->getTranslations() as $trans) {
                 $normalizedAttribute['labels'][$trans->getLocale(
                 )] = $trans->getLabel();
