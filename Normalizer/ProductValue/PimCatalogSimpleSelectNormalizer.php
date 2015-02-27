@@ -24,13 +24,12 @@ class PimCatalogSimpleSelectNormalizer implements ProductValueNormalizerInterfac
       $field,
       array $context = array()
     ) {
-        $options = $productValue->getOptions();
-        /** @var \Pim\Bundle\CatalogBundle\Entity\Option $subValue */
-        foreach ($options->getValues() as $subValue) {
-            $drupalProduct['values'][$field][$context['locale']][] = [
-              'type' => 'pim_catalog_simpleselect',
-              'code' => $subValue->getCode(),
-            ];
+        $option = $productValue->getOption();
+        if($option) {
+                $drupalProduct['values'][$field][$context['locale']][] = [
+                    'type' => 'pim_catalog_simpleselect',
+                    'code' => $option->getCode(),
+                ];
         }
     }
 }

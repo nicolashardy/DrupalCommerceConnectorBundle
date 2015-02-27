@@ -26,7 +26,7 @@ class PimCatalogTextareaNormalizer implements ProductValueNormalizerInterface
         $text = $productValue->getText();
 
         if (null !== $text) {
-            $drupalProduct['values'][$field][$context['locale']][] = array(
+            $productDrupal['values'][$field][$context['locale']][] = array(
               'type' => 'pim_catalog_textarea',
               'value' => $text,
             );
