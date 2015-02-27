@@ -33,8 +33,13 @@ class ProductsReader extends EntityReader
             $this->query = $this->em
                 ->getRepository($this->className)
                 ->createQueryBuilder('p')
-                ->where('p.enabled = :true')
-                ->setParameter('true', true)
+                ->where('p.validationDate IS NOT NULL')
+                ->andWhere(
+                    'p.validationDate > p.exportedMiraklAt '
+                    . 'OR p.exportedMiraklAt IS NULL '
+                    . 'OR p.updated > p.exportedMiraklAt'
+                )
+                ->addOrderBy('p.validationDate')
                 ->getQuery();
         }
 
