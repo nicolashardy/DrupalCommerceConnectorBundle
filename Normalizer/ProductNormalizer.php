@@ -11,6 +11,8 @@ use Pim\Bundle\CatalogBundle\Manager\ChannelManager;
 use Pim\Bundle\CatalogBundle\Model\ProductInterface;
 use Pim\Bundle\CatalogBundle\Entity\Channel;
 use Pim\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
+use Pim\Bundle\CatalogBundle\Entity\Repository\GroupRepository;
+use Pim\Bundle\CatalogBundle\Entity\Group;
 
 class ProductNormalizer implements NormalizerInterface
 {
@@ -64,6 +66,7 @@ class ProductNormalizer implements NormalizerInterface
     {
         $drupalProduct = $this->getDefaultDrupalProduct($product);
         $this->computeProductCategory($product, $drupalProduct);
+        $this->computeProductGroup($product, $drupalProduct);
         $this->computeProductValues(
           $product,
           $drupalProduct,
@@ -106,12 +109,27 @@ class ProductNormalizer implements NormalizerInterface
           'status'     => $product->isEnabled(),
           'labels'     => $labels,
           'categories' => [],
+          'groups' => [],
           'values'     => [],
         ];
 
         return $defaultDrupalProduct;
     }
 
+    /**
+     * @param ProductInterface $product
+     * @param array            $drupalProduct
+     */
+    protected function computeProductGroup(
+      ProductInterface $product,
+      array &$drupalProduct
+    ) {
+
+       /** @var Group $group */
+       foreach ($product->getGroups() as $group) {
+           $drupalProduct['groups'][$group->getType()->getCode()]['code'] = $group->getCode();
+       }
+    }
     /**
      * @param ProductInterface $product
      * @param array            $drupalProduct
@@ -141,15 +159,17 @@ class ProductNormalizer implements NormalizerInterface
       Channel $channel,
       $configuration
     ) {
+
         /** @var \Pim\Bundle\CatalogBundle\Model\ProductValue $value */
         foreach ($product->getValues() as $value) {
 
+            /*
             // Skip out of scope values or not global ones.
             if ($value->getScope() != $channel->getCode() && $value->getScope(
               ) !== null
             ) {
                 continue;
-            }
+            }*/
 
             $field  = $value->getAttribute()->getCode();
             $type   = $value->getAttribute()->getAttributeType();
@@ -161,13 +181,16 @@ class ProductNormalizer implements NormalizerInterface
               ->getFamily()
               ->getAttributeAsLabel()
               ->getCode();
-            if ($type == 'pim_catalog_identifier' || $field == $labelAttribute) {
+            
+            if ($type == 'pim_catalog_identifier' /* || $field == $labelAttribute*/) {
                 continue;
             }
+
             // Setup default locale.
             $context = [
               'locale'        => $locale,
               'scope'         => $value->getScope(),
+              'defaultLocale' => 'fr_FR',
               'defaultLocale' => 'fr_FR',
               'configuration' => $configuration,
             ];
