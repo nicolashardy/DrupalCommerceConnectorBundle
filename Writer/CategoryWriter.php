@@ -23,8 +23,7 @@ class CategoryWriter extends DrupalItemStep implements ItemWriterInterface
         //file_put_contents('categories.json', json_encode($items));
         foreach ($items[0] as $item) {
             try {
-                //    $test= json_encode($item);
-      //          $drupalResponse = $this->webservice->sendCategory($item);
+                $drupalResponse = $this->webservice->sendCategory($item);
                 $this->stepExecution->incrementWriteCount();
 
             } catch (\Exception $e) {
