@@ -3,7 +3,7 @@ parameters:
     actualys_drupal_commerce_connector.reader.category.class: Actualys\Bundle\DrupalCommerceConnectorBundle\Reader\ORM\CategoryReader
     actualys_drupal_commerce_connector.reader.attribute_option.class: Actualys\Bundle\DrupalCommerceConnectorBundle\Reader\ORM\AttributeOptionReader
     actualys_drupal_commerce_product_connector.reader.products.class: Actualys\Bundle\DrupalCommerceConnectorBundle\Reader\ProductsReader
-
+    actualys_drupal_commerce_connector.reader.doctrine.delta_product.class: Actualys\Bundle\DrupalCommerceConnectorBundle\Reader\ORM\DeltaProductReader
 
 services:
     # readers
@@ -24,9 +24,6 @@ services:
         arguments:
              - @doctrine.orm.default_entity_manager
              - %pim_catalog.entity.product.class%
-
-
-
 
     actualys_drupal_commerce_connector.reader.family:
         class: %pim_base_connector.reader.orm.entity.class%
@@ -55,7 +52,6 @@ services:
             - %pim_catalog.entity.category.class%
             - '@actualys_drupal_commerce_connector.repository.category'
 
-
     actualys_drupal_commerce_connector.reader.group:
          class: %pim_base_connector.reader.orm.entity.class%
          arguments:
@@ -70,3 +66,17 @@ services:
             - '@pim_catalog.manager.completeness'
             - '@pim_transform.converter.metric'
             - '@pim_catalog.object_manager.product'
+
+    actualys_drupal_commerce_connector.reader.doctrine.published_product_delta:
+        class: %actualys_drupal_commerce_connector.reader.doctrine.delta_product.class%
+        parent: actualys_drupal_commerce_connector.reader.doctrine.obsoleteproduct
+        arguments:
+            - @actualys_drupal_commerce_connector.manager.product_export
+
+    actualys_drupal_commerce_connector.reader.doctrine.obsoleteproduct:
+        class: %pim_base_connector.reader.doctrine.obsoleteproduct.class%
+        arguments:
+            - '@pimee_workflow.repository.published_product'
+            - '@pim_catalog.manager.channel'
+            - '@pim_catalog.manager.completeness'
+            - '@pim_transform.converter.metric'
