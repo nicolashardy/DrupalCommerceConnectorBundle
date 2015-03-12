@@ -32,7 +32,7 @@ services:
             - %pim_catalog.entity.family.class%
 
     actualys_drupal_commerce_connector.reader.attribute:
-        class: %pim_base_connector.reader.orm.entity.class%
+        class: %akeneo_export_attributes.reader.attributes.class%
         arguments:
             - '@doctrine.orm.default_entity_manager'
             - %pim_catalog.entity.attribute.class%
