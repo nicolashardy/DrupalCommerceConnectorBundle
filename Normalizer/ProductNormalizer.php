@@ -111,6 +111,7 @@ class ProductNormalizer implements NormalizerInterface
         }
 
         $defaultDrupalProduct = [
+          'akeneo_product_id' => $product->getId(),
           'sku'        => $product->getReference(),
           'family'     => $product->getFamily()->getCode(),
           'created'    => $product->getCreated()->format('c'),
