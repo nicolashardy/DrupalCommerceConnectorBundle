@@ -37,6 +37,7 @@ class FamilyNormalizer implements NormalizerInterface
         /**@var Family $family * */
         $normalizedFamily = [
           'code'             => $family->getCode(),
+          'update_time'      => $family->getUpdated()->getTimestamp(),
           'labels'           => [],
           'attribute_groups' => [],
         ];
