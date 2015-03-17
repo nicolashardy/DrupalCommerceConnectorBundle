@@ -18,10 +18,12 @@ use Akeneo\Bundle\BatchBundle\Event\EventInterface;
 class ProductWriter extends DrupalItemStep implements ItemWriterInterface
 {
 
-    public function __construct(EventDispatcher $eventDispatcher)
+    public function __construct(EventDispatcher $eventDispatcher, $productRepository, $entityManager)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->productandler   = $eventDispatcher;
+        $this->productRepository = $productRepository;
+        $this->entityManager = $entityManager;
     }
 
     protected $mergeImages;
@@ -43,6 +45,7 @@ class ProductWriter extends DrupalItemStep implements ItemWriterInterface
         foreach ($items as $item) {
             try {
               $this->webservice->sendProduct($item);
+              $this->setProductExportedToDrupal($item);
             } catch (\Exception $e) {
                 $event = new InvalidItemEvent(
                   __CLASS__,
@@ -92,5 +95,16 @@ class ProductWriter extends DrupalItemStep implements ItemWriterInterface
     public function setMergeImages($mergeImages)
     {
         $this->mergeImages = $mergeImages;
+    }
+
+    /**
+     * @param array $item
+     */
+    public function setProductExportedToDrupal($item)
+    {
+        $product = $this->productRepository->findOneById($item['akeneo_product_id']);
+        $product->setExportedDrupalAt(new \DateTime('now'));
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
     }
 }
