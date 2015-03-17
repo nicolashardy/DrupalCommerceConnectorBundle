@@ -67,12 +67,13 @@ class ProductNormalizer implements NormalizerInterface
      * @param  object                                                $product
      * @param  null                                                  $format
      * @param  array                                                 $context
+     * @param  boolean                                               $isDeleted
      * @return array|\Symfony\Component\Serializer\Normalizer\scalar
      * @throws NormalizeException
      */
-    public function normalize($product, $format = null, array $context = [])
+    public function normalize($product, $format = null, array $context = [], $isDeleted = false)
     {
-        $drupalProduct = $this->getDefaultDrupalProduct($product);
+        $drupalProduct = $this->getDefaultDrupalProduct($product, $isDeleted);
         $this->computeProductCategory($product, $drupalProduct);
         $this->computeProductGroup($product, $drupalProduct);
         $this->computeProductAssociation($product, $drupalProduct);
@@ -88,9 +89,10 @@ class ProductNormalizer implements NormalizerInterface
 
     /**
      * @param  $product
+     * @param  boolean $isDeleted
      * @return array
      */
-    public function getDefaultDrupalProduct(ProductInterface $product)
+    public function getDefaultDrupalProduct(ProductInterface $product, $isDeleted = false)
     {
         $labels           = [];
         $attributeAsLabel = $product->getFamily()->getAttributeAsLabel();
@@ -112,6 +114,7 @@ class ProductNormalizer implements NormalizerInterface
 
         $defaultDrupalProduct = [
           'akeneo_product_id' => $product->getId(),
+          'is_deleted' => $isDeleted,
           'sku'        => $product->getReference(),
           'family'     => $product->getFamily()->getCode(),
           'created'    => $product->getCreated()->format('c'),
