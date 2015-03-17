@@ -14,6 +14,14 @@ services:
             - '@pim_catalog.manager.product'
             - '@pim_catalog.manager.channel'
             - '@actualys_drupal_commerce_connector.normalizer.product'
+            
+     actualys_drupal_commerce_connector.processor.productDeleted:
+        class: %actualys_drupal_commerce_connector.processor.product.class%
+        arguments:
+            - '@pim_catalog.manager.product'
+            - '@pim_catalog.manager.channel'
+            - '@actualys_drupal_commerce_connector.normalizer.product'
+            - %status.delete%
 
     actualys_drupal_commerce_connector.processor.family:
         class: %actualys_drupal_commerce_connector.processor.family.class%
