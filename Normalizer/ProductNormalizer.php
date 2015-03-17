@@ -67,13 +67,12 @@ class ProductNormalizer implements NormalizerInterface
      * @param  object                                                $product
      * @param  null                                                  $format
      * @param  array                                                 $context
-     * @param  boolean                                               $isDeleted
      * @return array|\Symfony\Component\Serializer\Normalizer\scalar
      * @throws NormalizeException
      */
-    public function normalize($product, $format = null, array $context = [], $isDeleted = false)
+    public function normalize($product, $format = null, array $context = [])
     {
-        $drupalProduct = $this->getDefaultDrupalProduct($product, $isDeleted);
+        $drupalProduct = $this->getDefaultDrupalProduct($product, $context['is_deleted']);
         $this->computeProductCategory($product, $drupalProduct);
         $this->computeProductGroup($product, $drupalProduct);
         $this->computeProductAssociation($product, $drupalProduct);
@@ -89,7 +88,7 @@ class ProductNormalizer implements NormalizerInterface
 
     /**
      * @param  $product
-     * @param  boolean $isDeleted
+     * @param boolean $isDeleted
      * @return array
      */
     public function getDefaultDrupalProduct(ProductInterface $product, $isDeleted = false)
