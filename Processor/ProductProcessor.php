@@ -43,11 +43,13 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
     public function __construct(
       ProductManager $productManager,
       ChannelManager $channelManager,
-      ProductNormalizer $productNormalizer
+      ProductNormalizer $productNormalizer,
+      $status
     ) {
         $this->productManager    = $productManager;
         $this->channelManager    = $channelManager;
         $this->productNormalizer = $productNormalizer;
+        $this->status            = $status;
     }
 
     /**
@@ -60,6 +62,10 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
         /** @var Channel $channel */
         $channel = $this->channelManager->getChannelByCode($this->channel);
 
+        if($this->status == "delete") {
+            return $this->normalizeProduct($product, $channel, true);
+        }
+
         return $this->normalizeProduct($product, $channel);
     }
 
@@ -68,6 +74,7 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
      *
      * @param ProductInterface $product [description]
      * @param Channel          $channel
+     * @param boolean          $isDeleted
      *
      * @throws InvalidItemException If a normalization error occurs
      *
@@ -75,7 +82,8 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
      */
     protected function normalizeProduct(
       ProductInterface $product,
-      Channel $channel
+      Channel $channel,
+      $isDeleted = false
     ) {
         try {
             $processedItem = $this->productNormalizer->normalize(
@@ -83,7 +91,8 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
               null,
               [
                 'channel'       => $channel,
-                'configuration' => $this->getConfiguration()
+                'configuration' => $this->getConfiguration(),
+                'is_deleted' => $isDeleted
               ]
             );
         } catch (NormalizeException $e) {
