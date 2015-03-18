@@ -81,10 +81,26 @@ class ProductProcessor extends DrupalItemStep implements ItemProcessorInterface
      * @return array processed item
      */
     protected function normalizeProduct(
-      ProductInterface $product,
+      $product,
       Channel $channel,
       $isDeleted = false
     ) {
+
+        if(get_class($product) === "Chronopost\Bundle\CatalogBundle\Entity\DeleteHistory") {
+            $context = $product->getContext();
+            $sku = $context['sku'];
+            $family = $context['family_code'];
+
+            return array(
+                'sku'               => $sku,
+                'family'            => $family,
+                'history_id'        => $product->getId(),
+                'values'            => array(
+                                        'is_deleted' => true
+                                       )
+            );
+        }
+
         try {
             $processedItem = $this->productNormalizer->normalize(
               $product,
