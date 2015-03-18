@@ -14,6 +14,7 @@ services:
             - '@pim_catalog.manager.product'
             - '@pim_catalog.manager.channel'
             - '@actualys_drupal_commerce_connector.normalizer.product'
+            - %status.createUpdate%
             
     actualys_drupal_commerce_connector.processor.productDeleted:
         class: %actualys_drupal_commerce_connector.processor.product.class%
