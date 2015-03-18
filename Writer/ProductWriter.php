@@ -18,12 +18,13 @@ use Akeneo\Bundle\BatchBundle\Event\EventInterface;
 class ProductWriter extends DrupalItemStep implements ItemWriterInterface
 {
 
-    public function __construct(EventDispatcher $eventDispatcher, $productRepository, $entityManager)
+    public function __construct(EventDispatcher $eventDispatcher, $productRepository, $entityManager, $historyRepository)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->productandler   = $eventDispatcher;
         $this->productRepository = $productRepository;
         $this->entityManager = $entityManager;
+        $this->historyRepository = $historyRepository;
     }
 
     protected $mergeImages;
@@ -102,9 +103,17 @@ class ProductWriter extends DrupalItemStep implements ItemWriterInterface
      */
     public function setProductExportedToDrupal($item)
     {
-        $product = $this->productRepository->findOneById($item['akeneo_product_id']);
-        $product->setExportedDrupalAt(new \DateTime('now'));
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
+        if(isset($item['akeneo_product_id']) && intval($item['akeneo_product_id'])) {
+            $product = $this->productRepository->findOneById($item['akeneo_product_id']);
+            $product->setExportedDrupalAt(new \DateTime('now'));
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+
+        } elseif(isset($item['history_id']) && intval($item['history_id'])) {
+            $historyDeleted = $this->historyRepository->findOneById($item['history_id']);
+            $historyDeleted->setDrupalExported(new \DateTime('now'));
+            $this->entityManager->persist($historyDeleted);
+            $this->entityManager->flush();
+        }
     }
 }
