@@ -46,7 +46,7 @@ class PimCatalogImageNormalizer extends AbstractMediaNormalizer
         $field = preg_replace('/([_0-9]+)$/', '', $field);
       }
 
-      $absolutePath = $this->rootDir.'/uploads/product/'.$media->getFilename();
+      $absolutePath = $this->rootDir.'/uploads/product/'.basename($media->getFilename());
 
       $drupalProduct['values'][$field][$context['locale']][] = [
         'type'              => 'pim_catalog_image',
