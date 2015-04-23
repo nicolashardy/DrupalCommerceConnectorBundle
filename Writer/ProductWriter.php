@@ -103,17 +103,28 @@ class ProductWriter extends DrupalItemStep implements ItemWriterInterface
      */
     public function setProductExportedToDrupal($item)
     {
+        $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
         if(isset($item['akeneo_product_id']) && intval($item['akeneo_product_id'])) {
-            $product = $this->productRepository->findOneById($item['akeneo_product_id']);
+
+            $id_product = $item['akeneo_product_id'];
+            $sql = "UPDATE ChronopostCatalogBundle:Product p SET p.exportedDrupalAt='".$now."' WHERE p.id=$id_product";
+            $this->entityManager->createQuery($sql)->getResult();
+
+            /*$product = $this->productRepository->findOneById($item['akeneo_product_id']);
             $product->setExportedDrupalAt(new \DateTime('now'));
             $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            $this->entityManager->flush();*/
 
         } elseif(isset($item['history_id']) && intval($item['history_id'])) {
-            $historyDeleted = $this->historyRepository->findOneById($item['history_id']);
+
+            $id_history = $item['history_id'];
+            $sql = "UPDATE ChronopostCatalogBundle:DeleteHistory h SET h.drupal_exported='".$now."' WHERE p.id=$id_history";
+            $this->entityManager->createQuery($sql)->getResult();
+
+            /*$historyDeleted = $this->historyRepository->findOneById($item['history_id']);
             $historyDeleted->setDrupalExported(new \DateTime('now'));
             $this->entityManager->persist($historyDeleted);
-            $this->entityManager->flush();
-        }
+            $this->entityManager->flush();*/
     }
 }
