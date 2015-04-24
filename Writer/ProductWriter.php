@@ -118,13 +118,14 @@ class ProductWriter extends DrupalItemStep implements ItemWriterInterface
 
         } elseif(isset($item['history_id']) && intval($item['history_id'])) {
 
-            $id_history = $item['history_id'];
-            $sql = "UPDATE ChronopostCatalogBundle:DeleteHistory h SET h.drupal_exported='".$now."' WHERE p.id=$id_history";
-            $this->entityManager->createQuery($sql)->getResult();
+          $id_history = $item['history_id'];
+          $sql = "UPDATE ChronopostCatalogBundle:DeleteHistory h SET h.drupal_exported='" . $now . "' WHERE p.id=$id_history";
+          $this->entityManager->createQuery($sql)->getResult();
 
-            /*$historyDeleted = $this->historyRepository->findOneById($item['history_id']);
-            $historyDeleted->setDrupalExported(new \DateTime('now'));
-            $this->entityManager->persist($historyDeleted);
-            $this->entityManager->flush();*/
+          /*$historyDeleted = $this->historyRepository->findOneById($item['history_id']);
+          $historyDeleted->setDrupalExported(new \DateTime('now'));
+          $this->entityManager->persist($historyDeleted);
+          $this->entityManager->flush();*/
+        }
     }
 }
